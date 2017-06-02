@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.0/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         backupGlobals="false"
+         verbose="true">
+
+    <testsuite>
+        <directory name="csPHPUnit Sample" suffix="Test.php">tests</directory>
+    </testsuite>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">tests/sample</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <ini name="serialize_precision" value="14"/>
+    </php>
+
+    <logging>
+        <log type="coverage-clover" target="tests/_reports/logs/clover.xml"/> 
+        <log type="coverage-html" target="tests/_reports/coverage" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70" />
+        <log type="testdox-text" target="tests/_reports/testdox/executed.txt"/>
+        <log type="testdox-html" target="tests/_reports/testdox/testdox.html"/>
+        <log type="junit" target="tests/_reports/logs/junit.xml" logIncompleteSkipped="false"/>
+    </logging>
+</phpunit>

@@ -1,0 +1,263 @@
+{
+    "source": 2,
+    "id": 1,
+    "revision": 12,
+    "name": "customercare-CD",
+    "description": null,
+    "createdBy": {
+        "id": "3f249d5b-58f4-6620-b810-909739f7b11e",
+        "displayName": "Joao Almeida",
+        "uniqueName": "joao.diogo.almeida@gmail.com",
+        "url": "https://app.vssps.visualstudio.com/A4ba02002-9cef-4399-ab23-e2801defd734/_apis/Identities/3f249d5b-58f4-6620-b810-909739f7b11e",
+        "imageUrl": "https://xxx.visualstudio.com/_api/_common/identityImage?id=3f249d5b-58f4-6620-b810-909739f7b11e"
+    },
+    "createdOn": "2017-05-09T18:03:52.183Z",
+    "modifiedBy": {
+        "id": "3f249d5b-58f4-6620-b810-909739f7b11e",
+        "displayName": "Joao Almeida",
+        "uniqueName": "joao.diogo.almeida@gmail.com",
+        "url": "https://app.vssps.visualstudio.com/A4ba02002-9cef-4399-ab23-e2801defd734/_apis/Identities/3f249d5b-58f4-6620-b810-909739f7b11e",
+        "imageUrl": "https://xxx.visualstudio.com/_api/_common/identityImage?id=3f249d5b-58f4-6620-b810-909739f7b11e"
+    },
+    "modifiedOn": "2017-06-02T12:59:24.883Z",
+    "lastRelease": null,
+    "path": "\\",
+    "variables": {
+        "k8namespace": {
+            "value": "csdev"
+        }
+    },
+    "variableGroups": [],
+    "environments": [
+        {
+            "id": 1,
+            "name": "DEV",
+            "rank": 1,
+            "owner": {
+                "id": "3f249d5b-58f4-6620-b810-909739f7b11e",
+                "displayName": "Joao Almeida",
+                "uniqueName": "joao.diogo.almeida@gmail.com",
+                "url": "https://app.vssps.visualstudio.com/A4ba02002-9cef-4399-ab23-e2801defd734/_apis/Identities/3f249d5b-58f4-6620-b810-909739f7b11e",
+                "imageUrl": "https://xxx.visualstudio.com/_api/_common/identityImage?id=3f249d5b-58f4-6620-b810-909739f7b11e"
+            },
+            "variables": {
+                "k8namespace": {
+                    "value": "csdev"
+                }
+            },
+            "preDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 1
+                    }
+                ]
+            },
+            "deployStep": {
+                "tasks": [],
+                "id": 2
+            },
+            "postDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 3
+                    }
+                ]
+            },
+            "deployPhases": [
+                {
+                    "deploymentInput": {
+                        "parallelExecution": {
+                            "parallelExecutionType": "none"
+                        },
+                        "skipArtifactsDownload": false,
+                        "timeoutInMinutes": 0,
+                        "queueId": 1,
+                        "demands": [],
+                        "enableAccessToken": false
+                    },
+                    "rank": 1,
+                    "phaseType": 1,
+                    "name": "Run on agent",
+                    "workflowTasks": [
+                        {
+                            "taskId": "9240b5c1-a1b2-4799-9325-e071c63236fb",
+                            "version": "1.*",
+                            "name": "Replace tokens in deploy-csenvironment.yaml",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "inputs": {
+                                "sourcePath": "$(System.DefaultWorkingDirectory)/CustomerCare-CI/drop/",
+                                "filePattern": "deploy-csenvironment.yaml",
+                                "tokenRegex": "__(\\w+)__",
+                                "secretTokens": ""
+                            }
+                        },
+                        {
+                            "taskId": "cbc316a2-586f-4def-be79-488a1f503564",
+                            "version": "0.*",
+                            "name": "kubectl get",
+                            "enabled": false,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "inputs": {
+                                "kubernetesServiceEndpoint": "4d027dce-df40-4270-90a5-871f0bc0e471",
+                                "containerRegistryType": "Azure Container Registry",
+                                "dockerRegistryEndpoint": "",
+                                "azureSubscriptionEndpoint": "ac53c695-a823-4d4a-b349-fc61f56b9e3e",
+                                "azureContainerRegistry": "{\"loginServer\":\"xxxx.azurecr.io\", \"id\" : \"/subscriptions/48cdd944-0366-46ad-871e-d6e409a534fd/resourcegroups/clientscapeacr/providers/Microsoft.ContainerRegistry/registries/clientscape\"}",
+                                "secretName": "",
+                                "forceUpdate": "false",
+                                "command": "get",
+                                "useConfigurationFile": "false",
+                                "configuration": "",
+                                "arguments": "pod",
+                                "cwd": "$(System.DefaultWorkingDirectory)",
+                                "outputFormat": "yaml",
+                                "kubectlOutput": ""
+                            }
+                        },
+                        {
+                            "taskId": "cbc316a2-586f-4def-be79-488a1f503564",
+                            "version": "0.*",
+                            "name": "K8s Apply Task",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "inputs": {
+                                "kubernetesServiceEndpoint": "4d027dce-df40-4270-90a5-871f0bc0e471",
+                                "containerRegistryType": "Azure Container Registry",
+                                "dockerRegistryEndpoint": "",
+                                "azureSubscriptionEndpoint": "ac53c695-a823-4d4a-b349-fc61f56b9e3e",
+                                "azureContainerRegistry": "{\"loginServer\":\"xxxx.azurecr.io\", \"id\" : \"/subscriptions/48cdd944-0366-46ad-871e-d6e409a534fd/resourcegroups/clientscapeacr/providers/Microsoft.ContainerRegistry/registries/clientscape\"}",
+                                "secretName": "",
+                                "forceUpdate": "true",
+                                "command": "apply",
+                                "useConfigurationFile": "true",
+                                "configuration": "$(System.DefaultWorkingDirectory)/CustomerCare-CI/drop/deploy-csenvironment.yaml",
+                                "arguments": "",
+                                "cwd": "$(System.DefaultWorkingDirectory)",
+                                "outputFormat": "json",
+                                "kubectlOutput": ""
+                            }
+                        },
+                        {
+                            "taskId": "cbc316a2-586f-4def-be79-488a1f503564",
+                            "version": "0.*",
+                            "name": "K8s Set New Image To Cluster",
+                            "enabled": false,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "inputs": {
+                                "kubernetesServiceEndpoint": "4d027dce-df40-4270-90a5-871f0bc0e471",
+                                "containerRegistryType": "Azure Container Registry",
+                                "dockerRegistryEndpoint": "",
+                                "azureSubscriptionEndpoint": "ac53c695-a823-4d4a-b349-fc61f56b9e3e",
+                                "azureContainerRegistry": "{\"loginServer\":\"xxxx.azurecr.io\", \"id\" : \"/subscriptions/48cdd944-0366-46ad-871e-d6e409a534fd/resourcegroups/clientscapeacr/providers/Microsoft.ContainerRegistry/registries/clientscape\"}",
+                                "secretName": "",
+                                "forceUpdate": "true",
+                                "command": "set",
+                                "useConfigurationFile": "false",
+                                "configuration": "",
+                                "arguments": "",
+                                "cwd": "$(System.DefaultWorkingDirectory)",
+                                "outputFormat": "json",
+                                "kubectlOutput": ""
+                            }
+                        }
+                    ]
+                }
+            ],
+            "environmentOptions": {
+                "emailNotificationType": "OnlyOnFailure",
+                "emailRecipients": "release.environment.owner;release.creator",
+                "skipArtifactsDownload": false,
+                "timeoutInMinutes": 0,
+                "enableAccessToken": false,
+                "publishDeploymentStatus": false
+            },
+            "demands": [],
+            "conditions": [
+                {
+                    "name": "ReleaseStarted",
+                    "conditionType": 1,
+                    "value": ""
+                }
+            ],
+            "executionPolicy": {
+                "concurrencyCount": 0,
+                "queueDepthCount": 0
+            },
+            "schedules": [],
+            "retentionPolicy": {
+                "daysToKeep": 30,
+                "releasesToKeep": 3,
+                "retainBuild": true
+            }
+        }
+    ],
+    "artifacts": [
+        {
+            "sourceId": "27f388bf-1868-4f82-9498-8dc6f8ef130f:2",
+            "type": "Build",
+            "alias": "CustomerCare-CI",
+            "definitionReference": {
+                "artifactSourceDefinitionUrl": {
+                    "id": "https://xxx.visualstudio.com/_permalink/_build/index?collectionId=80c54067-0aba-40c0-a263-dace7f39ef5f&projectId=27f388bf-1868-4f82-9498-8dc6f8ef130f&definitionId=2",
+                    "name": ""
+                },
+                "defaultVersionType": {
+                    "id": "latestType",
+                    "name": "Latest"
+                },
+                "definition": {
+                    "id": "2",
+                    "name": "CustomerCare-CI"
+                },
+                "project": {
+                    "id": "27f388bf-1868-4f82-9498-8dc6f8ef130f",
+                    "name": "CustomerCare"
+                }
+            },
+            "isPrimary": true
+        }
+    ],
+    "triggers": [
+        {
+            "artifactAlias": "CustomerCare-CI",
+            "triggerConditions": [
+                {
+                    "sourceBranch": "master",
+                    "tags": []
+                }
+            ],
+            "triggerType": 1
+        }
+    ],
+    "releaseNameFormat": "Release-$(rev:r)",
+    "url": "https://clientscape.vsrm.visualstudio.com/27f388bf-1868-4f82-9498-8dc6f8ef130f/_apis/Release/definitions/1",
+    "_links": {
+        "self": {
+            "href": "https://clientscape.vsrm.visualstudio.com/27f388bf-1868-4f82-9498-8dc6f8ef130f/_apis/Release/definitions/1"
+        },
+        "web": {
+            "href": "https://xxx.visualstudio.com/27f388bf-1868-4f82-9498-8dc6f8ef130f/_release?definitionId=1"
+        }
+    },
+    "tags": [],
+    "properties": {}
+}

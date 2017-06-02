@@ -1,0 +1,8 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: xxxx.azurecr.io
+  namespace: csdev
+data:
+  .dockercfg: xxx base 64 xxx
+type: kubernetes.io/dockercfg

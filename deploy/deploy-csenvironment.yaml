@@ -1,0 +1,266 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: csmysqlpv
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standarddisk
+spec:
+  capacity:
+    storage: 16Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: __k8namespace__
+    name: csmysqlpvc
+  azureDisk:
+    diskURI: https://xxxx.blob.core.windows.net/vhds/csmysqlpv.vhd
+    diskName: csmysqld
+    readOnly: false
+    cachingMode: ReadWrite
+    fsType: ext4
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: csmongopv
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standarddisk
+spec:
+  capacity:
+    storage: 16Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: __k8namespace__
+    name: csmongopvc
+  azureDisk:
+    diskURI: https://xxxx.blob.core.windows.net/vhds/csmongopv.vhd
+    diskName: csmongod
+    readOnly: false
+    cachingMode: ReadWrite
+    fsType: ext4
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: csmongoconfigpv
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standarddisk
+spec:
+  capacity:
+    storage: 16Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: __k8namespace__
+    name: csmongoconfigpvc
+  azureDisk:
+    diskURI: https://xxxx.blob.core.windows.net/vhds/csmongoconfigpv.vhd
+    diskName: csmongoconfigd
+    readOnly: false
+    cachingMode: ReadWrite
+    fsType: ext4
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: csredispv
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standarddisk
+spec:
+  capacity:
+    storage: 16Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: __k8namespace__
+    name: csredispvc
+  azureDisk:
+    diskURI: https://xxxx.blob.core.windows.net/vhds/csredispv.vhd
+    diskName: csredisd
+    readOnly: false
+    cachingMode: ReadWrite
+    fsType: ext4
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: csmysqlpvc
+  namespace: __k8namespace__
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standarddisk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 16Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: csmongopvc
+  namespace: __k8namespace__
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standarddisk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 16Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: csmongoconfigpvc
+  namespace: __k8namespace__
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standarddisk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 16Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: csredispvc
+  namespace: __k8namespace__
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standarddisk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 16Gi
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: csbackends
+  namespace: __k8namespace__
+spec:
+  selector:
+    app: csbackendd
+  ports:
+  - name: mysql
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  - name: mongo
+    protocol: TCP
+    port: 27017
+    targetPort: 27017
+  - name: redis
+    protocol: TCP
+    port: 6379
+    targetPort: 6379
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: __k8namespace__
+  labels:
+    app: csbackendd
+  name: csbackendd
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: csbackendpod
+      name: csbackendpod
+      namespace: __k8namespace__
+    spec:
+      containers:
+        - name: csmysql
+          image: xxxx.azurecr.io/clientscape/csmysql:latest
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              name: csmysqlpv
+          ports:
+            - containerPort: 3306
+        - name: csmongo
+          image: xxxx.azurecr.io/clientscape/csmongo:latest
+          volumeMounts:
+            - mountPath: "/data/db"
+              name: csmongopv
+            - mountPath: "/data/configdb"
+              name: csmongoconfigpv
+          ports:
+            - containerPort: 27017
+        - name: csredis
+          image: xxxx.azurecr.io/clientscape/csredis:latest
+          volumeMounts:
+            - mountPath: "/data"
+              name: csredispv
+          ports:
+            - containerPort: 6379
+      imagePullSecrets:
+        - name: xxxx.azurecr.io
+      volumes:
+        - name: csmysqlpv
+          persistentVolumeClaim:
+            claimName: csmysqlpvc
+        - name: csmongopv
+          persistentVolumeClaim:
+            claimName: csmongopvc
+        - name: csmongoconfigpv
+          persistentVolumeClaim:
+            claimName: csmongoconfigpvc
+        - name: csredispv
+          persistentVolumeClaim:
+            claimName: csredispvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cscustomercare
+  namespace: __k8namespace__
+spec:
+  selector:
+    app: cscustomercared
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: cscustomercared 
+  name: cscustomercared
+  namespace: __k8namespace__
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: csfrontendpod
+      name: csfrontendpod
+      namespace: __k8namespace__
+    spec:
+      containers:
+        - name: cscustomercare
+          image: xxxx.azurecr.io/clientscape/cs-customercare:latest
+      imagePullSecrets:
+        - name: xxxx.azurecr.io

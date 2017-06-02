@@ -1,0 +1,631 @@
+{
+    "version": "0.3",
+    "definition": {
+        "build": [
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Copy Publish Artifact: Configs ",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "1d341bb0-2106-458c-8422-d00bcea6512a",
+                    "versionSpec": "1.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "CopyRoot": "config",
+                    "Contents": "**/*",
+                    "ArtifactName": "drop",
+                    "ArtifactType": "Container",
+                    "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Copy Publish Artifact: Deploy",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "1d341bb0-2106-458c-8422-d00bcea6512a",
+                    "versionSpec": "1.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "CopyRoot": "deploy",
+                    "Contents": "**/*",
+                    "ArtifactName": "drop",
+                    "ArtifactType": "Container",
+                    "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Shell Script : Install Fontcustom ",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                    "versionSpec": "2.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "scriptPath": "install-fontcustom.sh",
+                    "args": "$(System.DefaultWorkingDirectory)",
+                    "disableAutoCwd": "true",
+                    "cwd": "",
+                    "failOnStandardError": "false"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Replace tokens in Phinx.build.yml",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "9240b5c1-a1b2-4799-9325-e071c63236fb",
+                    "versionSpec": "1.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "sourcePath": "",
+                    "filePattern": "phinx.build.yml",
+                    "tokenRegex": "__(cs\\-\\w+)__",
+                    "secretTokens": ""
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Replace tokens in Config.build.ini",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "9240b5c1-a1b2-4799-9325-e071c63236fb",
+                    "versionSpec": "1.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "sourcePath": "src/app/config/",
+                    "filePattern": "config.build.ini",
+                    "tokenRegex": "__(cs\\-\\w+)__",
+                    "secretTokens": ""
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Yarn Install",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "0888c9a9-d1b2-4567-aae2-beadcb2059b3",
+                    "versionSpec": "0.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "ProjectDirectory": "src/public",
+                    "Arguments": "install",
+                    "ProductionMode": "false"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Yarn Run Build",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "0888c9a9-d1b2-4567-aae2-beadcb2059b3",
+                    "versionSpec": "0.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "ProjectDirectory": "src/public",
+                    "Arguments": "run build",
+                    "ProductionMode": "false"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Yarn Sockets Install",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "0888c9a9-d1b2-4567-aae2-beadcb2059b3",
+                    "versionSpec": "0.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "ProjectDirectory": "src/app/sockets/cs-frontend",
+                    "Arguments": "install",
+                    "ProductionMode": "false"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Shell Script : Composer Update",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                    "versionSpec": "2.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "scriptPath": "composer-update.sh",
+                    "args": "",
+                    "disableAutoCwd": "true",
+                    "cwd": "$(System.DefaultWorkingDirectory)",
+                    "failOnStandardError": "false"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Copy Files Binaries",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "5bfb729a-a7c8-4a78-a7c3-8d717bb7c13c",
+                    "versionSpec": "2.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "SourceFolder": "src",
+                    "Contents": "**/*",
+                    "TargetFolder": "$(Build.BinariesDirectory)",
+                    "CleanTargetFolder": "true",
+                    "OverWrite": "false",
+                    "flattenFolders": "false"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Execute Unit Tests (PHPUnit)",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                    "versionSpec": "2.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "scriptPath": "cs-unit-test.sh",
+                    "args": "tests",
+                    "disableAutoCwd": "false",
+                    "cwd": "",
+                    "failOnStandardError": "false"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Publish PHPUnit Test Results",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "0b0f01ed-7dde-43ff-9cbb-e48954daf9b1",
+                    "versionSpec": "1.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "testRunner": "JUnit",
+                    "testResultsFiles": "**/junit.xml",
+                    "mergeTestResults": "false",
+                    "testRunTitle": "",
+                    "platform": "",
+                    "configuration": "",
+                    "publishRunAttachments": "true"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Publish PHPUnit code coverage ",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "2a7ebc54-c13e-490e-81a5-d7561ab7cd97",
+                    "versionSpec": "1.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "codeCoverageTool": "Cobertura",
+                    "summaryFileLocation": "$(Build.SourcesDirectory)/tests/_reports/logs/junit.xml",
+                    "reportDirectory": "$(Build.SourcesDirectory)/tests/_reports/",
+                    "additionalCodeCoverageFiles": "",
+                    "failIfCoverageEmpty": "false"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Archive files ",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "d8b84976-e99a-4b86-b885-4849694435b0",
+                    "versionSpec": "1.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "rootFolder": "$(Build.BinariesDirectory)",
+                    "includeRootFolder": "true",
+                    "archiveType": "tar",
+                    "archiveFile": "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tar",
+                    "replaceExistingArchive": "true"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Copy Publish CustomerCare Artifact",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "1d341bb0-2106-458c-8422-d00bcea6512a",
+                    "versionSpec": "1.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "CopyRoot": "$(Build.ArtifactStagingDirectory)",
+                    "Contents": "*.tar",
+                    "ArtifactName": "drop",
+                    "ArtifactType": "Container",
+                    "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Build an image",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                    "versionSpec": "0.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "containerregistrytype": "Azure Container Registry",
+                    "dockerRegistryEndpoint": "",
+                    "azureSubscriptionEndpoint": "ac53c695-a823-4d4a-b349-fc61f56b9e3e",
+                    "azureContainerRegistry": "{\"loginServer\":\"xxxx.azurecr.io\", \"id\" : \"/subscriptions/48cdd944-0366-46ad-871e-d6e409a534fd/resourcegroups/clientscapeacr/providers/Microsoft.ContainerRegistry/registries/clientscape\"}",
+                    "action": "Build an image",
+                    "dockerFile": "Dockerfile",
+                    "buildArguments": "",
+                    "defaultContext": "true",
+                    "context": "",
+                    "imageName": "$(RegistryRepositoryTagPrefix)$(Build.Repository.Name):$(Build.BuildId)",
+                    "qualifyImageName": "true",
+                    "additionalImageTags": "",
+                    "includeSourceTags": "false",
+                    "includeLatestTag": "false",
+                    "imageDigestFile": "",
+                    "containerName": "",
+                    "ports": "",
+                    "volumes": "",
+                    "envVars": "",
+                    "workDir": "",
+                    "entrypoint": "",
+                    "containerCommand": "",
+                    "detached": "true",
+                    "restartPolicy": "no",
+                    "restartMaxRetries": "",
+                    "customCommand": "",
+                    "dockerHostEndpoint": "",
+                    "cwd": "$(System.DefaultWorkingDirectory)"
+                }
+            },
+            {
+                "enabled": true,
+                "continueOnError": false,
+                "alwaysRun": false,
+                "displayName": "Push an image",
+                "timeoutInMinutes": 0,
+                "task": {
+                    "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                    "versionSpec": "0.*",
+                    "definitionType": "task"
+                },
+                "inputs": {
+                    "containerregistrytype": "Azure Container Registry",
+                    "dockerRegistryEndpoint": "",
+                    "azureSubscriptionEndpoint": "ac53c695-a823-4d4a-b349-fc61f56b9e3e",
+                    "azureContainerRegistry": "{\"loginServer\":\"xxxx.azurecr.io\", \"id\" : \"/subscriptions/48cdd944-0366-46ad-871e-d6e409a534fd/resourcegroups/clientscapeacr/providers/Microsoft.ContainerRegistry/registries/clientscape\"}",
+                    "action": "Push an image",
+                    "dockerFile": "**/Dockerfile",
+                    "buildArguments": "",
+                    "defaultContext": "true",
+                    "context": "",
+                    "imageName": "$(RegistryRepositoryTagPrefix)$(Build.Repository.Name):$(Build.BuildId)",
+                    "qualifyImageName": "true",
+                    "additionalImageTags": "",
+                    "includeSourceTags": "false",
+                    "includeLatestTag": "false",
+                    "imageDigestFile": "",
+                    "containerName": "",
+                    "ports": "",
+                    "volumes": "",
+                    "envVars": "",
+                    "workDir": "",
+                    "entrypoint": "",
+                    "containerCommand": "",
+                    "detached": "true",
+                    "restartPolicy": "no",
+                    "restartMaxRetries": "",
+                    "customCommand": "",
+                    "dockerHostEndpoint": "",
+                    "cwd": "$(System.DefaultWorkingDirectory)"
+                }
+            }
+        ],
+        "options": [
+            {
+                "enabled": true,
+                "definition": {
+                    "id": "5d58cc01-7c75-450c-be18-a388ddb129ec"
+                },
+                "inputs": {
+                    "branchFilters": "[\"+refs/heads/*\"]",
+                    "additionalFields": "{}"
+                }
+            },
+            {
+                "enabled": false,
+                "definition": {
+                    "id": "7c555368-ca64-4199-add6-9ebaf0b0137d"
+                },
+                "inputs": {
+                    "multipliers": "[]",
+                    "parallel": "false",
+                    "continueOnError": "true",
+                    "additionalFields": "{}"
+                }
+            },
+            {
+                "enabled": false,
+                "definition": {
+                    "id": "a9db38f9-9fdc-478c-b0f9-464221e58316"
+                },
+                "inputs": {
+                    "workItemType": "587146",
+                    "assignToRequestor": "true",
+                    "additionalFields": "{}"
+                }
+            },
+            {
+                "enabled": false,
+                "definition": {
+                    "id": "57578776-4c22-4526-aeb0-86b6da17ee9c"
+                },
+                "inputs": {}
+            }
+        ],
+        "triggers": [
+            {
+                "branchFilters": [
+                    "+refs/heads/master"
+                ],
+                "pathFilters": [
+                    "-/frontend",
+                    "-/deploy"
+                ],
+                "batchChanges": false,
+                "maxConcurrentBuildsPerBranch": 1,
+                "pollingInterval": 0,
+                "triggerType": 2
+            }
+        ],
+        "variables": {
+            "system.debug": {
+                "value": "false",
+                "allowOverride": true
+            },
+            "RegistryRepositoryTagPrefix": {
+                "value": "clientscape/cs-"
+            },
+            "cs-dbhost": {
+                "value": "localhost"
+            },
+            "cs-dbusername": {
+                "value": "root"
+            },
+            "cs-dbpassword": {
+                "value": "whalesecurity"
+            },
+            "cs-dbname": {
+                "value": "Clientscape"
+            },
+            "cs-mongohost": {
+                "value": "localhost"
+            },
+            "cs-mongousername": {
+                "value": ""
+            },
+            "cs-mongopassword": {
+                "value": ""
+            },
+            "cs-redishost": {
+                "value": "localhost"
+            },
+            "cs-redisport": {
+                "value": "6379"
+            }
+        },
+        "retentionRules": [
+            {
+                "branches": [
+                    "+refs/heads/*"
+                ],
+                "artifacts": [],
+                "artifactTypesToDelete": [
+                    "FilePath",
+                    "SymbolStore"
+                ],
+                "daysToKeep": 10,
+                "minimumToKeep": 1,
+                "deleteBuildRecord": true,
+                "deleteTestResults": true
+            }
+        ],
+        "_links": {
+            "self": {
+                "href": "https://xxx.visualstudio.com/27f388bf-1868-4f82-9498-8dc6f8ef130f/_apis/build/Definitions/2"
+            },
+            "web": {
+                "href": "https://xxx.visualstudio.com/_permalink/_build/index?collectionId=80c54067-0aba-40c0-a263-dace7f39ef5f&projectId=27f388bf-1868-4f82-9498-8dc6f8ef130f&definitionId=2"
+            },
+            "editor": {
+                "href": "https://xxx.visualstudio.com/_permalink/_build/definitionEditor?collectionId=80c54067-0aba-40c0-a263-dace7f39ef5f&projectId=27f388bf-1868-4f82-9498-8dc6f8ef130f&definitionId=2"
+            }
+        },
+        "buildNumberFormat": "$(date:yyyyMMdd)$(rev:.r)",
+        "jobAuthorizationScope": 1,
+        "jobTimeoutInMinutes": 60,
+        "jobCancelTimeoutInMinutes": 5,
+        "repository": {
+            "properties": {
+                "cleanOptions": "0",
+                "labelSources": "0",
+                "labelSourcesFormat": "$(build.buildNumber)",
+                "reportBuildStatus": "true",
+                "gitLfsSupport": "false",
+                "skipSyncSource": "false",
+                "checkoutNestedSubmodules": "false",
+                "fetchDepth": "0"
+            },
+            "id": "b64b40e5-37c9-4474-8c4b-c5990c235182",
+            "type": "TfsGit",
+            "name": "customercare",
+            "url": "https://xxx.visualstudio.com/_git/customercare",
+            "defaultBranch": "refs/heads/master",
+            "clean": "false",
+            "checkoutSubmodules": false
+        },
+        "processParameters": {},
+        "quality": 1,
+        "authoredBy": {
+            "id": "3f249d5b-58f4-6620-b810-909739f7b11e",
+            "displayName": "Joao Almeida",
+            "uniqueName": "joao.diogo.almeida@gmail.com",
+            "url": "https://app.vssps.visualstudio.com/A4ba02002-9cef-4399-ab23-e2801defd734/_apis/Identities/3f249d5b-58f4-6620-b810-909739f7b11e",
+            "imageUrl": "https://xxx.visualstudio.com/_api/_common/identityImage?id=3f249d5b-58f4-6620-b810-909739f7b11e"
+        },
+        "queue": {
+            "id": 1,
+            "name": "Default",
+            "pool": {
+                "id": 1,
+                "name": "Default"
+            }
+        },
+        "id": 2,
+        "name": "CustomerCare-CI",
+        "url": "https://xxx.visualstudio.com/27f388bf-1868-4f82-9498-8dc6f8ef130f/_apis/build/Definitions/2",
+        "uri": "vstfs:///Build/Definition/2",
+        "path": "\\",
+        "type": 2,
+        "revision": 94,
+        "createdDate": "2017-06-01T23:03:38.210Z",
+        "project": {
+            "id": "27f388bf-1868-4f82-9498-8dc6f8ef130f",
+            "name": "CustomerCare",
+            "description": "Git",
+            "url": "https://xxx.visualstudio.com/_apis/projects/27f388bf-1868-4f82-9498-8dc6f8ef130f",
+            "state": "wellFormed",
+            "revision": 9,
+            "visibility": 0
+        }
+    },
+    "metaData": {
+        "customTasks": [
+            {
+                "author": "Microsoft Corporation",
+                "friendlyName": "Docker Compose",
+                "id": "adcfa1c1-3be7-45fc-871f-13634b2cff1d",
+                "version": "0.3.5"
+            },
+            {
+                "author": "Colin Dembovsky (colinsalmcorner.com)",
+                "friendlyName": "Tokenize File",
+                "id": "6d9895eb-8056-4111-b4b3-7b80fd383e44",
+                "version": "1.2.168"
+            },
+            {
+                "author": "Colin Dembovsky (colinsalmcorner.com)",
+                "friendlyName": "Coverage Gate",
+                "id": "0b6f0167-8389-4db8-89c6-4ae7688cd15a",
+                "version": "1.2.168"
+            },
+            {
+                "author": "Microsoft Corporation",
+                "friendlyName": "Docker",
+                "id": "b93c4522-5bea-4118-97ae-2b560628a157",
+                "version": "0.3.1"
+            },
+            {
+                "author": "Colin Dembovsky (colinsalmcorner.com)",
+                "friendlyName": "Replace Tokens",
+                "id": "9240b5c1-a1b2-4799-9325-e071c63236fb",
+                "version": "1.2.168"
+            },
+            {
+                "author": "Microsoft Corporation",
+                "friendlyName": "Docker Deploy",
+                "id": "dd7c9344-1179-44a9-891b-177fbb98b9a7",
+                "version": "0.1.7"
+            },
+            {
+                "author": "Colin Dembovsky (colinsalmcorner.com)",
+                "friendlyName": "(deprecated) Azure Web Deploy",
+                "id": "5c9ea8be-e6fb-4ae7-905e-67bfd6741967",
+                "version": "0.1.168"
+            },
+            {
+                "author": "Colin Dembovsky (colinsalmcorner.com)",
+                "friendlyName": "Tag Build or Release",
+                "id": "5d741236-331c-4461-82a2-9d55eb91bb91",
+                "version": "0.1.168"
+            },
+            {
+                "author": "Colin Dembovsky (colinsalmcorner.com)",
+                "friendlyName": "(deprecated) Docker Publish",
+                "id": "639b8e0c-2c2c-41e7-b822-4d03aefcb92b",
+                "version": "0.1.168"
+            },
+            {
+                "author": "Colin Dembovsky (colinsalmcorner.com)",
+                "friendlyName": "Azure Web App Route Traffic",
+                "id": "aafd0d72-ff21-4439-b282-44be5e9d4d90",
+                "version": "0.1.168"
+            },
+            {
+                "author": "Colin Dembovsky (colinsalmcorner.com)",
+                "friendlyName": "DacPac Schema Compare",
+                "id": "1ebf2967-63b3-4372-89f7-6799108a22f0",
+                "version": "1.2.168"
+            },
+            {
+                "author": "Colin Dembovsky (colinsalmcorner.com)",
+                "friendlyName": "Version Assemblies",
+                "id": "5b4d14d0-3868-11e4-a31d-3f0a2d8202f4",
+                "version": "2.2.168"
+            },
+            {
+                "author": "Geek Learning",
+                "friendlyName": "Yarn task",
+                "id": "0888c9a9-d1b2-4567-aae2-beadcb2059b3",
+                "version": "0.7.999"
+            }
+        ],
+        "serviceEndpoints": []
+    }
+}

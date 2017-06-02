@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: csdev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: csqa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cspresales
